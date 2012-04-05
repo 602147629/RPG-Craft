@@ -8,33 +8,33 @@
 	import net.flashpunk.FP;
 	
 	/**
-	 * Performance-optimized animated Image. Can have multiple animations,
-	 * which draw frames from the provided source image to the screen.
-	 */
+	* Performance-optimized animated Image. Can have multiple animations,
+	* which draw frames from the provided source image to the screen.
+	*/
 	public class Spritemap extends Image
 	{
 		/**
-		 * If the animation has stopped.
-		 */
+		* If the animation has stopped.
+		*/
 		public var complete:Boolean = true;
 		
 		/**
-		 * Optional callback function for animation end.
-		 */
+		* Optional callback function for animation end.
+		*/
 		public var callback:Function;
 		
 		/**
-		 * Animation speed factor, alter this to speed up/slow down all animations.
-		 */
+		* Animation speed factor, alter this to speed up/slow down all animations.
+		*/
 		public var rate:Number = 1;
 		
 		/**
-		 * Constructor.
-		 * @param	source			Source image.
-		 * @param	frameWidth		Frame width.
-		 * @param	frameHeight		Frame height.
-		 * @param	callback		Optional callback function for animation end.
-		 */
+		* Constructor.
+		* @param	source			Source image.
+		* @param	frameWidth		Frame width.
+		* @param	frameHeight		Frame height.
+		* @param	callback		Optional callback function for animation end.
+		*/
 		public function Spritemap(source:*, frameWidth:uint = 0, frameHeight:uint = 0, callback:Function = null) 
 		{
 			_rect = new Rectangle(0, 0, frameWidth, frameHeight);
@@ -52,8 +52,8 @@
 		}
 		
 		/**
-		 * Updates the spritemap's buffer.
-		 */
+		* Updates the spritemap's buffer.
+		*/
 		override public function updateBuffer(clearBefore:Boolean = false):void 
 		{
 			// get position of the current frame
@@ -71,7 +71,7 @@
 		{
 			if (_anim && !complete)
 			{
-				_timer += (FP.timeInFrames ? _anim._frameRate : _anim._frameRate * FP.elapsed) * rate;
+				_timer += (FP.fixed ? _anim._frameRate : _anim._frameRate * FP.elapsed) * rate;
 				if (_timer >= 1)
 				{
 					while (_timer >= 1)
@@ -89,7 +89,14 @@
 							{
 								_index = _anim._frameCount - 1;
 								complete = true;
-								if (callback != null) callback();
+								if (_anim._onComplete != null) 
+								{
+									_anim._onComplete();
+								}
+								else
+								{
+									if (callback != null) callback();
+								}
 								break;
 							}
 						}
@@ -101,28 +108,27 @@
 		}
 		
 		/**
-		 * Add an Animation.
-		 * @param	name		Name of the animation.
-		 * @param	frames		Array of frame indices to animate through.
-		 * @param	frameRate	Animation speed.
-		 * @param	loop		If the animation should loop.
-		 * @return	A new Anim object for the animation.
-		 */
-		public function add(name:String, frames:Array, frameRate:Number = 0, loop:Boolean = true):Anim
+		* Add an Animation.
+		* @param	name		Name of the animation.
+		* @param	frames		Array of frame indices to animate through.
+		* @param	frameRate	Animation speed.
+		* @param	loop		If the animation should loop.
+		* @return	A new Anim object for the animation.
+		*/
+		public function add(name:String, frames:Array, frameRate:Number = 0, loop:Boolean = true, onComplete:Function = null):Anim
 		{
 			if (_anims[name]) throw new Error("Cannot have multiple animations with the same name");
-			(_anims[name] = new Anim(name, frames, frameRate, loop))._parent = this;
+			(_anims[name] = new Anim(name, frames, frameRate, loop, onComplete))._parent = this;
 			return _anims[name];
 		}
 		
 		/**
-		 * Plays an animation.
-		 * @param	name		Name of the animation to play.
-		 * @param	reset		If the animation should force-restart if it is already playing.
-		 * @param	frame		Frame of the animation to start from, if restarted.
-		 * @return	Anim object representing the played animation.
-		 */
-		public function play(name:String = "", reset:Boolean = false, frame:int = 0):Anim
+		* Plays an animation.
+		* @param	name		Name of the animation to play.
+		* @param	reset		If the animation should force-restart if it is already playing.
+		* @return	Anim object representing the played animation.
+		*/
+		public function play(name:String = "", reset:Boolean = false):Anim
 		{
 			if (!reset && _anim && _anim._name == name) return _anim;
 			_anim = _anims[name];
@@ -130,57 +136,57 @@
 			{
 				_frame = _index = 0;
 				complete = true;
+				
 				updateBuffer();
 				return null;
 			}
 			_index = 0;
 			_timer = 0;
-			_frame = uint(_anim._frames[frame % _anim._frameCount]);
+			_frame = uint(_anim._frames[0]);
 			complete = false;
 			updateBuffer();
 			return _anim;
 		}
 		
 		/**
-		 * Gets the frame index based on the column and row of the source image.
-		 * @param	column		Frame column.
-		 * @param	row			Frame row.
-		 * @return	Frame index.
-		 */
+		* Gets the frame index based on the column and row of the source image.
+		* @param	column		Frame column.
+		* @param	row			Frame row.
+		* @return	Frame index.
+		*/
 		public function getFrame(column:uint = 0, row:uint = 0):uint
 		{
 			return (row % _rows) * _columns + (column % _columns);
 		}
 		
 		/**
-		 * Sets the current display frame based on the column and row of the source image.
-		 * When you set the frame, any animations playing will be stopped to force the frame.
-		 * @param	column		Frame column.
-		 * @param	row			Frame row.
-		 */
+		* Sets the current display frame based on the column and row of the source image.
+		* When you set the frame, any animations playing will be stopped to force the frame.
+		* @param	column		Frame column.
+		* @param	row			Frame row.
+		*/
 		public function setFrame(column:uint = 0, row:uint = 0):void
 		{
 			_anim = null;
 			var frame:uint = (row % _rows) * _columns + (column % _columns);
 			if (_frame == frame) return;
 			_frame = frame;
-			_timer = 0;
 			updateBuffer();
 		}
 		
 		/**
-		 * Assigns the Spritemap to a random frame.
-		 */
+		* Assigns the Spritemap to a random frame.
+		*/
 		public function randFrame():void
 		{
 			frame = FP.rand(_frameCount);
 		}
 		
 		/**
-		 * Sets the frame to the frame index of an animation.
-		 * @param	name	Animation to draw the frame frame.
-		 * @param	index	Index of the frame of the animation to set to.
-		 */
+		* Sets the frame to the frame index of an animation.
+		* @param	name	Animation to draw the frame frame.
+		* @param	index	Index of the frame of the animation to set to.
+		*/
 		public function setAnimFrame(name:String, index:int):void
 		{
 			var frames:Array = _anims[name]._frames;
@@ -190,9 +196,9 @@
 		}
 		
 		/**
-		 * Sets the current frame index. When you set this, any
-		 * animations playing will be stopped to force the frame.
-		 */
+		* Sets the current frame index. When you set this, any
+		* animations playing will be stopped to force the frame.
+		*/
 		public function get frame():int { return _frame; }
 		public function set frame(value:int):void
 		{
@@ -201,13 +207,12 @@
 			if (value < 0) value = _frameCount + value;
 			if (_frame == value) return;
 			_frame = value;
-			_timer = 0;
 			updateBuffer();
 		}
 		
 		/**
-		 * Current index of the playing animation.
-		 */
+		* Current index of the playing animation.
+		*/
 		public function get index():uint { return _anim ? _index : 0; }
 		public function set index(value:uint):void
 		{
@@ -216,28 +221,27 @@
 			if (_index == value) return;
 			_index = value;
 			_frame = uint(_anim._frames[_index]);
-			_timer = 0;
 			updateBuffer();
 		}
 		
 		/**
-		 * The amount of frames in the Spritemap.
-		 */
+		* The amount of frames in the Spritemap.
+		*/
 		public function get frameCount():uint { return _frameCount; }
 		
 		/**
-		 * Columns in the Spritemap.
-		 */
+		* Columns in the Spritemap.
+		*/
 		public function get columns():uint { return _columns; }
 		
 		/**
-		 * Rows in the Spritemap.
-		 */
+		* Rows in the Spritemap.
+		*/
 		public function get rows():uint { return _rows; }
 		
 		/**
-		 * The currently playing animation.
-		 */
+		* The currently playing animation.
+		*/
 		public function get currentAnim():String { return _anim ? _anim._name : ""; }
 		
 		// Spritemap information.
