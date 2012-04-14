@@ -10,6 +10,7 @@ package
 			add(new Enemy(425, 175));
 			
 			// Place world tiles
+			add(new Map);
 			
 			// Place player
 			add(new Player);

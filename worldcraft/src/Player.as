@@ -88,9 +88,9 @@ package
 			}
 			else {
 				if (Input.check("rotate_left")) {
-					var rad :Number = Math.atan(k1 / k2);
+					//var rad :Number = Math.atan(k1 / k2);
 					
-					var row :Number = Math.abs( rad * Math.PI );
+					//var row :Number = Math.abs( rad * Math.PI );
 				}
 				else if (Input.check("rotate_right")) {
 					direction.y += Math.sin(25);
@@ -105,6 +105,11 @@ package
 			}
 			
 			sprite.play(current_anim + "_" + Math.floor(anim_row));
+			
+			// col detection
+			if (collide("level", x, y)) {
+				trace ("collision");
+			}
 		}
 		
 		private function getMouseDirection() :int {
