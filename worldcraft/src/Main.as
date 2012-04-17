@@ -3,6 +3,7 @@ package
 	import net.flashpunk.Engine;
 	import net.flashpunk.FP;
 	import flash.ui.ContextMenu;
+	import splash.Splash;
 	
 	/**
 	 * ...
@@ -15,6 +16,10 @@ package
 		{
 			super(800, 600, 60, false);
 			
+			/*var s:Splash = new Splash;
+			FP.world.add(s);
+			s.start(splashComplete);*/
+			
 			FP.world = new MyWorld;
 			
 			var myMenu:ContextMenu = new ContextMenu();
@@ -25,6 +30,11 @@ package
 		override public function init():void
 		{
 			trace("FlashPunk has started successfully!");
+		}
+		
+		public function splashComplete():void
+		{
+			// This function is called when the splash screen finishes.
 		}
 		/*
 			focusGained():void

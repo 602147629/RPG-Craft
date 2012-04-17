@@ -1,11 +1,8 @@
 package  
 {
 	import net.flashpunk.Entity;
-	
 	import net.flashpunk.graphics.PreRotation;
-	
 	import net.flashpunk.utils.Input;
-	
 	import net.flashpunk.FP;
 	
 	public class Cursor extends Entity
