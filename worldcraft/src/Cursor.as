@@ -25,8 +25,8 @@ package
 			x = Input.mouseX + FP.camera.x;
 			y = Input.mouseY + FP.camera.y;
 			
-			var k1 :int = FP.width/2 - Input.mouseX;
-			var k2 :int = FP.height/2 - Input.mouseY;
+			var k1 :int = FP.halfWidth - Input.mouseX;
+			var k2 :int = FP.halfHeight - Input.mouseY;
 			
 			var rad :Number = Math.atan(k1 / k2);
 			

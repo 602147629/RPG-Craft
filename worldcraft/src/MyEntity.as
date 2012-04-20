@@ -1,4 +1,4 @@
-package
+	package
 {
 	import flash.geom.Point;
 	import net.flashpunk.Entity;
@@ -10,6 +10,13 @@ package
 	{
 		protected var ENTITY_SPEED :uint = 100;
 		protected var direction:Point = new Point();
+		
+		protected var pos:Point;
+		
+		private var scaling_offset:Point = new Point(2,2);
+		protected var playerz :Number = 1;
+		protected var xangle :Number = 0;
+		protected var z :Number = 1;
 		
 		protected var current_anim  :String  = "idle";
 		protected var anim_row :Number = 0;
@@ -43,12 +50,14 @@ package
 			updateMovement();
 			
 			// Collision
-			if (collide("level", x, y)) {
+			if (collide("level_"+Math.floor(z), x, y)) {
 				trace ("collision");
 			}
 			
 			// Set size and visibility
-			
+			//if (pos) Spritemap(graphic).scale = z * MyWorld.camHeight; /// Lets... make the tiles *not* scale by distance to cam
+			//else Spritemap(graphic).scale = ((FP.distance(0, y+FP.halfHeight, 0, FP.camera.y) / FP.height / z) * MyWorld.camHeight);
+			//Spritemap(graphic).visible
 			
 			// Update animation
 			Spritemap(graphic).play(current_anim + "_" + anim_row);

@@ -88,6 +88,17 @@ package
 				
 				lookDirection(new Point(x + Math.cos(angle)*10 , y + Math.sin(angle)*10) );
 				
+				if (Input.check(Key.A)) {
+					MyWorld.camHeight+=.1;
+					z+=.1;
+				}
+				if (Input.check(Key.Z)) {
+					MyWorld.camHeight-=.1;
+					z-=.1;
+				}
+				
+				FP.console.log(MyWorld.camHeight);
+				
 				if (Input.check("walk_forwards")) {
 					moveForwards();
 				}

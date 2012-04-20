@@ -1,0 +1,19 @@
+{
+	"enemies": [
+		{
+			"name": "salad",
+			"type": "human",
+			"fe": 2.50,
+			"inventory": [
+				"sword": "excalibur"
+			]
+		},
+		{
+			"name": "pizza",
+			"type": "human",
+			"fe": 4.50,
+			"inventory": [
+			]
+		}
+	]
+}

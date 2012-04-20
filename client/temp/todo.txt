@@ -1,0 +1,15 @@
+Goal for today.
+
+Today I shall:
+
+  - Basic movement code (ok)
+  - Chunk system
+  - Basic server code, talking to client
+
+
+Animations:
+
+	Idle
+	Run
+	Die
+	Attack

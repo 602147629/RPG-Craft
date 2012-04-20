@@ -1,0 +1,3 @@
+gmic.exe player_00001.png player_00002.png player_00003.png player_00004.png player_00005.png player_00006.png player_00007.png player_00008.png player_00009.png player_00010.png -a y -o player.png
+gmic.exe gfx_enemy0001.png gfx_enemy0002.png gfx_enemy0003.png gfx_enemy0004.png gfx_enemy0005.png gfx_enemy0006.png gfx_enemy0007.png gfx_enemy0008.png gfx_enemy0009.png gfx_enemy0010.png -a y -o enemy.png
+pause
