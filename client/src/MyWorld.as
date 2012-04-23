@@ -11,9 +11,11 @@ package
 	{
 		public static var camHeight:Number = 1; // five units up
 		public static var time:Number = 1; // clock. effects entity colours
-		public static var isNetwork:Boolean = true;
-		public var socket:Socket = new Socket();
+		public static var isNetwork:Boolean = false;
+		public static var socket:Socket = new Socket();
 		public static var map:Map;
+		
+		public static var player:Player;
 		
 		public function MyWorld()
 		{
@@ -28,13 +30,19 @@ package
 				socket.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecError);
 				
 				socket.connect("localhost", 13);
-				
-				trace ("test");
 			}
 			else {
 				// Place world tiles
 				map = new Map;
 			}
+			
+			// Place player
+			add(player = new Player());
+			
+			add(player.cubeshadow);
+			
+			// Place cursor into the World
+			add(new Cursor);
 		}
 		
 		override public function update():void 

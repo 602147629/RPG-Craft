@@ -55,18 +55,9 @@ package
 				for each(var worldBase:Object in levelData) {
 					// cubes
 					for each(var cube:Object in worldBase) {
-						FP.world.add(new WorldTile(new Point(cube["x"],cube["y"]), cube["z"], cube["type"]));
+						FP.world.add(new GrassTile(new Point(cube["x"],cube["y"]), cube["z"], cube["type"]));
 					}
 				}
-				
-				// Place entities
-				//add(new Enemy(425, 175));
-				
-				// Place player
-				FP.world.add(new Player);
-				
-				// Place cursor into the World
-				FP.world.add(new Cursor);
 			}
 			else {
 				var request:URLRequest = new URLRequest("level.json");
@@ -113,30 +104,24 @@ package
             for each(var worldBase:Object in levelData) {
 				// cubes
                 for each(var cube:Object in worldBase) {
-					FP.world.add(new WorldTile(new Point(cube["x"],cube["y"]), cube["z"], cube["type"]));
+					FP.world.add(new GrassTile(new Point(cube["x"],cube["y"]), cube["z"], cube["type"]));
                 }
             }
 			
 			// Place entities
-			//add(new Enemy(425, 175));
-			
-			// Place player
-			FP.world.add(new Player);
-			
-			// Place cursor into the World
-			FP.world.add(new Cursor);
+			//FP.world.add(new Enemy(425, 175));
         }
 		
 		public function setTile(x:Number, y:Number, z:Number, type:String):void {
 			// Convert to local space
-			FP.world.add(new WorldTile(new Point(Math.floor(x/TILE_LENGTH), Math.floor(y/(TILE_LENGTH/2.5))), Math.floor(z), type)); 
+			FP.world.add(new GrassTile(new Point(Math.floor(x/TILE_LENGTH+0.5), Math.floor(y/(TILE_LENGTH/2.5))), Math.floor(z), type)); 
 			// 2.5 is a magic number to place them..
 			// if already there, remove..?
 			
 			if (MyWorld.isNetwork) {
-				MyWorld.socket.connect("localhost", 13);
+				//MyWorld.socket.connect("localhost", 13);
 				MyWorld.socket.writeInt(Math.floor(x/TILE_LENGTH));
-				MyWorld.socket.writeInt(Math.floor(y/(TILE_LENGTH/2.5))));
+				MyWorld.socket.writeInt(Math.floor(y/(TILE_LENGTH/2.5)));
 				MyWorld.socket.writeInt(Math.floor(z));
 			}
 		}

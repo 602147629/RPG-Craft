@@ -12,15 +12,18 @@
 		protected var direction:Point = new Point();
 		protected var old:Point = new Point();
 		
-		protected var pos:Point;
-		
 		private var scaling_offset:Point = new Point(2,2);
 		protected var playerz :Number = 1;
 		protected var xangle :Number = 0;
-		protected var z :Number = 1;
+		public var z :Number = 1; // TODO: Set to private again?
 		
 		protected var current_anim  :String  = "idle";
 		protected var anim_row :Number = 0;
+		
+		public var isCollided :Boolean = false;
+		
+		protected var TILE_LENGTH:uint = 108;
+		protected var TILE_HEIGHT:uint = 38;
 		
 		public function MyEntity()
 		{
@@ -31,7 +34,7 @@
 				// Shift to next row of animations
 				var animation_shift :uint = row * sprite.columns;
 				
-				// Extract animations from spritemap
+				// Extract animations from spritemap TODO: Make array of these animations to make this generic
 				sprite.add("idle_"+ String(row), [0 + animation_shift, 1 + animation_shift], 2, true);
 				sprite.add("run_" + String(row), [2 + animation_shift, 3 + animation_shift],  2, true);
 				sprite.add("attack_" + String(row), [4 + animation_shift, 5 + animation_shift, 6 + animation_shift, 7 + animation_shift],  24, false, resetAnimation);
@@ -43,70 +46,12 @@
 			return sprite;
 		}
 		
-		protected function updateMovement():void {
-			// AI / Controls
-		}
-		
-		override public function update():void {
-			updateMovement();
-			
-			// Collision
-			if (collide("level_"+Math.floor(z), x, y)) {
-				trace ("collision");
-				//x = old.x;
-				//y = old.y;
-			}
-			
-			old.x = x;
-			old.y = y;
-			
-			this.layer = -100000;
-			
-			// Set size and visibility
-			//if (pos) Spritemap(graphic).scale = z * MyWorld.camHeight; /// Lets... make the tiles *not* scale by distance to cam
-			//else Spritemap(graphic).scale = ((FP.distance(0, y+FP.halfHeight, 0, FP.camera.y) / FP.height / z) * MyWorld.camHeight);
-			//Spritemap(graphic).visible
-			
-			// Update animation
-			Spritemap(graphic).play(current_anim + "_" + anim_row);
-		}
-		
-		protected function lookDirection(p:Point):void {
-			var k1 :int = direction.x = x - p.x;
-			var k2 :int = direction.y = y - p.y;
-			
-			var rad :Number = Math.atan(k1 / k2);
-			
-			var row :Number = Math.abs( rad * Math.PI );
-			
-			if (p.y > y)
-			{
-				row = Spritemap(graphic).rows - row;
-			}
-			if (p.x < x) 
-			{
-				Spritemap(graphic).scaleX = -1;
-			}
-			else {
-				Spritemap(graphic).scaleX = 1;
-			}
-			
-			anim_row = Math.floor(row);
-		}
-		
-		protected function moveForwards():void {
-			x -= (direction.x / direction.length) * ENTITY_SPEED * FP.elapsed;
-			y -= (direction.y / direction.length) * ENTITY_SPEED * FP.elapsed;
-			
-			current_anim = "run";
-		}
-		
-		protected function attack():void {
-			current_anim = "attack";
-		}
-		
 		protected function resetAnimation():void {
 			current_anim = "idle";
+		}
+		
+		protected function updateMovement():void {
+			// AI / Controls
 		}
 		
 		public function destroy():void

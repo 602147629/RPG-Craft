@@ -7,7 +7,7 @@ package
 	import net.flashpunk.utils.Input;
 	import flash.geom.Point;
 	
-	public class Enemy extends MyEntity
+	public class Enemy extends Character
 	{
 		[Embed(source="../Assets/enemy.png")] private const ENEMY:Class;
 		
