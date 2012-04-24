@@ -42,9 +42,6 @@ package
 		override public function update():void {
 			updateMovement();
 			
-			old.x = x;
-			old.y = y;
-			
 			layer = -((y/38) + z); // TODO: TILE_HEIGHT: 38... fixme.
 			
 			// Set size and visibility

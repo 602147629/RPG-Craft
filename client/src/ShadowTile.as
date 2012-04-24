@@ -7,7 +7,7 @@ package
 	
 	/**
 	 * ...
-	 * @author ...
+	 * @author Alan Whitburn Haugen
 	 */
 	public class ShadowTile extends WorldTile
 	{

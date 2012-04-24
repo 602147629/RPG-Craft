@@ -30,7 +30,7 @@ package
 		public function Player() 
 		{
 			graphic = setupAnimations(new Spritemap(PLAYER, 128, 128));
-			//setHitbox(TILE_LENGTH, TILE_HEIGHT * 2, 0, -30);
+			setHitbox(20, 20);
 			
 			ENTITY_SPEED = 50;
 			
@@ -99,16 +99,7 @@ package
 				// TODO: Duplicated in the else statement...
 				if (Input.pressed("create_cube")) {
 					MyWorld.map.setTile(Input.mouseX+FP.camera.x,Input.mouseY+FP.camera.y,cubez,"grass");
-				}
-				
-				// Collision
-				var cube:Entity = collide("grass_"+Math.floor(z), x, y);
-				if (cube) {
-					trace ("collision");
-					//posisjon + kollisjonsnormal * spiller_radius
-					x = old.x + FP.distance(x, cube.x)/old.x;
-					y = old.y + FP.distance(y, cube.y)/old.y;
-				}
+				}	
 			}
 			else {
 				if (Input.check("rotate_left")) {
@@ -144,14 +135,45 @@ package
 				}
 			}
 			
-			FP.console.log(MyWorld.camHeight);
-		}
-		
-		override protected function moveForwards():void {
-			super.moveForwards();
+			// Collision
+			var cube:Entity = collide("grass_"+Math.floor(z), x, y);
+			if (cube) {
+				var cube_centerx :Number = cube.x + TILE_LENGTH / 2;
+				var cube_centery :Number = cube.y + TILE_HEIGHT * 2;
+				
+				//posisjon + kollisjonsnormal * spiller_radius
+				if (y < cube_centery) {
+					// north ^
+					if (x < cube_centerx) {
+						x -= FP.distance(x, cube.x + TILE_LENGTH/2) / x;
+						y -= FP.distance(y, cube.y + TILE_HEIGHT / 2) / y;
+						FP.log("north");
+					}
+					// east ->
+					else {
+						x += FP.distance(x, cube.x + TILE_LENGTH/2) / x;
+						y -= FP.distance(y, cube.y + TILE_HEIGHT / 2) / y;
+						FP.log("east");
+					}
+				}
+				// west <-
+				else if (x < cube_centerx) {
+					x -= FP.distance(x, cube.x + TILE_LENGTH/2) / x;
+					y += FP.distance(y, cube.y + TILE_HEIGHT / 2) / y;
+					FP.log("west");
+				}
+				// south \/
+				else {
+					x += FP.distance(x, cube.x + TILE_LENGTH/2) / x;
+					y += FP.distance(y, cube.y + TILE_HEIGHT / 2) / y;
+					FP.log("south");
+				}
+			}
 			
 			FP.camera.x = x - FP.halfWidth;
 			FP.camera.y = y - FP.halfHeight;
+			
+			//FP.console.log(MyWorld.camHeight);
 		}
 		
 	}

@@ -3,10 +3,11 @@ package
 	import WorldTile;
 	import flash.geom.Point;
 	import net.flashpunk.graphics.Spritemap;
+	import net.flashpunk.masks.Pixelmask;
 	
 	/**
 	 * ...
-	 * @author ...
+	 * @author Alan Whitburn Haugen
 	 */
 	public class GrassTile extends WorldTile
 	{
@@ -28,8 +29,8 @@ package
 			var m:Pixelmask = new Pixelmask(form,-Spritemap(graphic).width/2,-Spritemap(graphic).height/2);
 			mask = m;*/
 			
-			setHitbox(TILE_LENGTH, TILE_HEIGHT, 0, -60);
-			//mask = new Pixelmask(PIXELMAP, 0, -30);
+			//setHitbox(TILE_LENGTH, TILE_HEIGHT, 0, -60);
+			mask = new Pixelmask(PIXELMAP);
 			layer = -pos.y + z;
 			trace (this.type);
 		}

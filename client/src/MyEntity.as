@@ -10,7 +10,6 @@
 	{
 		protected var ENTITY_SPEED :uint = 100;
 		protected var direction:Point = new Point();
-		protected var old:Point = new Point();
 		
 		private var scaling_offset:Point = new Point(2,2);
 		protected var playerz :Number = 1;
