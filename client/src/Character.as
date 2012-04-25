@@ -1,6 +1,6 @@
 package  
 {
-	import MyEntity;
+	import net.flashpunk.Entity;
 	import net.flashpunk.graphics.Spritemap;
 	import flash.geom.Point;
 	import net.flashpunk.FP;
@@ -42,7 +42,42 @@ package
 		override public function update():void {
 			updateMovement();
 			
-			layer = -((y/38) + z); // TODO: TILE_HEIGHT: 38... fixme.
+			layer = -((y / TILE_HEIGHT) + z);
+			
+			// Collision
+			var cube:Entity = collide("grass_"+Math.floor(z), x, y);
+			if (cube) {
+				var cube_centerx :Number = cube.x + TILE_LENGTH / 2;
+				var cube_centery :Number = cube.y + TILE_HEIGHT * 2;
+				
+				//posisjon + kollisjonsnormal * spiller_radius
+				if (y < cube_centery) {
+					// north ^
+					if (x < cube_centerx) {
+						x -= FP.distance(x, cube.x + TILE_LENGTH/2) / x;
+						y -= FP.distance(y, cube.y + TILE_HEIGHT / 2) / y;
+						FP.log("north");
+					}
+					// east ->
+					else {
+						x += FP.distance(x, cube.x + TILE_LENGTH/2) / x;
+						y -= FP.distance(y, cube.y + TILE_HEIGHT / 2) / y;
+						FP.log("east");
+					}
+				}
+				// west <-
+				else if (x < cube_centerx) {
+					x -= FP.distance(x, cube.x + TILE_LENGTH/2) / x;
+					y += FP.distance(y, cube.y + TILE_HEIGHT / 2) / y;
+					FP.log("west");
+				}
+				// south \/
+				else {
+					x += FP.distance(x, cube.x + TILE_LENGTH/2) / x;
+					y += FP.distance(y, cube.y + TILE_HEIGHT / 2) / y;
+					FP.log("south");
+				}
+			}
 			
 			// Set size and visibility
 			//if (pos) Spritemap(graphic).scale = z * MyWorld.camHeight; /// Lets... make the tiles *not* scale by distance to cam
@@ -54,8 +89,8 @@ package
 		}
 		
 		protected function moveForwards():void {
-			x -= (direction.x / direction.length) * ENTITY_SPEED * FP.elapsed;
-			y -= (direction.y / direction.length) * ENTITY_SPEED * FP.elapsed;
+			x -= (direction.x / direction.length) * ENTITY_SPEED * Math.abs(direction.x)/100 * FP.elapsed; // TODO: Remove direction.x and direction.y from the equation?
+			y -= (direction.y / direction.length) * ENTITY_SPEED * Math.abs(direction.y)/100 * FP.elapsed;
 			
 			current_anim = "run";
 		}

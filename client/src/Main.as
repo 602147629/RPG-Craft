@@ -16,6 +16,8 @@ package
 		{
 			super(800, 600, 60, false);
 			
+			FP.screen.color = 0xFF0000;
+			
 			/*var s:Splash = new Splash(0xFF3366, 0x202020, 30, 120, 30);
 			FP.world.add(s);
 			s.start(splashComplete);*/

@@ -11,15 +11,10 @@
 		protected var ENTITY_SPEED :uint = 100;
 		protected var direction:Point = new Point();
 		
-		private var scaling_offset:Point = new Point(2,2);
-		protected var playerz :Number = 1;
-		protected var xangle :Number = 0;
 		public var z :Number = 1; // TODO: Set to private again?
 		
 		protected var current_anim  :String  = "idle";
 		protected var anim_row :Number = 0;
-		
-		public var isCollided :Boolean = false;
 		
 		protected var TILE_LENGTH:uint = 108;
 		protected var TILE_HEIGHT:uint = 38;

@@ -1,6 +1,5 @@
 package  
 {
-	import net.flashpunk.Entity;
 	import net.flashpunk.graphics.Spritemap;
 	import net.flashpunk.utils.Input;
 	import net.flashpunk.utils.Key;
@@ -30,7 +29,7 @@ package
 		public function Player() 
 		{
 			graphic = setupAnimations(new Spritemap(PLAYER, 128, 128));
-			setHitbox(20, 20);
+			setHitbox(28, 28);
 			
 			ENTITY_SPEED = 50;
 			
@@ -132,41 +131,6 @@ package
 				
 				if (Input.pressed("create_cube")) {
 					MyWorld.map.setTile((x-50) + Math.cos(angle)*75,(y-50) + Math.sin(angle)*75,cubez,"grass");
-				}
-			}
-			
-			// Collision
-			var cube:Entity = collide("grass_"+Math.floor(z), x, y);
-			if (cube) {
-				var cube_centerx :Number = cube.x + TILE_LENGTH / 2;
-				var cube_centery :Number = cube.y + TILE_HEIGHT * 2;
-				
-				//posisjon + kollisjonsnormal * spiller_radius
-				if (y < cube_centery) {
-					// north ^
-					if (x < cube_centerx) {
-						x -= FP.distance(x, cube.x + TILE_LENGTH/2) / x;
-						y -= FP.distance(y, cube.y + TILE_HEIGHT / 2) / y;
-						FP.log("north");
-					}
-					// east ->
-					else {
-						x += FP.distance(x, cube.x + TILE_LENGTH/2) / x;
-						y -= FP.distance(y, cube.y + TILE_HEIGHT / 2) / y;
-						FP.log("east");
-					}
-				}
-				// west <-
-				else if (x < cube_centerx) {
-					x -= FP.distance(x, cube.x + TILE_LENGTH/2) / x;
-					y += FP.distance(y, cube.y + TILE_HEIGHT / 2) / y;
-					FP.log("west");
-				}
-				// south \/
-				else {
-					x += FP.distance(x, cube.x + TILE_LENGTH/2) / x;
-					y += FP.distance(y, cube.y + TILE_HEIGHT / 2) / y;
-					FP.log("south");
 				}
 			}
 			
